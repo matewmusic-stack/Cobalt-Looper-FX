@@ -1,0 +1,114 @@
+{
+  "emulator": "Bluebox FX1 Lab",
+  "method": "Node VM with deterministic DOM shim and manually advanced 24-PPQN interval",
+  "checks": [
+    {
+      "name": "Emulator initializes",
+      "ok": true,
+      "detail": "DOM boot completed"
+    },
+    {
+      "name": "Built-in checks all pass",
+      "ok": true,
+      "detail": "Two-bar memory formula 288000 frames at 80 BPM PASS; Stereo float32 accounting 2304000 bytes PASS; Allocator address order 0xC1000000 → 0xC3FFFFFF PASS; Baseline FX1 allocation fits 768,000 bytes PASS; Allocator ceiling rejects overflow Request crosses 0xC3400000 PASS; Looper state model idle EMPTY PASS"
+    },
+    {
+      "name": "Default allocator fits",
+      "ok": true,
+      "detail": "remaining=35239680, reserve=262144"
+    },
+    {
+      "name": "100 BPM two-bar memory calculation",
+      "ok": true,
+      "detail": "1843200 bytes"
+    },
+    {
+      "name": "120 BPM two-bar memory calculation",
+      "ok": true,
+      "detail": "1536000 bytes"
+    },
+    {
+      "name": "Exact-fit allocator boundary accepted",
+      "ok": true,
+      "detail": "FITS WITH RESERVE"
+    },
+    {
+      "name": "One-byte reserve overrun rejected",
+      "ok": true,
+      "detail": "INSUFFICIENT RESERVE"
+    },
+    {
+      "name": "Capture arms for next bar",
+      "ok": true,
+      "detail": "Waiting for next bar"
+    },
+    {
+      "name": "Capture waits until bar boundary",
+      "ok": true,
+      "detail": "ARMED"
+    },
+    {
+      "name": "Capture begins exactly on next bar",
+      "ok": true,
+      "detail": "Capturing 2 bar(s)"
+    },
+    {
+      "name": "Capture remains recording until full two bars",
+      "ok": true,
+      "detail": "99%"
+    },
+    {
+      "name": "Two-bar capture transitions to playback",
+      "ok": true,
+      "detail": "Phrase repeating continuously"
+    },
+    {
+      "name": "120 BPM two-bar phrase duration correct",
+      "ok": true,
+      "detail": "4.00 s"
+    },
+    {
+      "name": "120 BPM stereo float32 buffer size correct",
+      "ok": true,
+      "detail": "1.465 MB · stereo float32"
+    },
+    {
+      "name": "Feedback/dry-wet controls reflect changes",
+      "ok": true,
+      "detail": "50% / 35%"
+    },
+    {
+      "name": "Stop enters STOP state",
+      "ok": true,
+      "detail": "STOP"
+    },
+    {
+      "name": "Clear resets loop and buffer",
+      "ok": true,
+      "detail": "EMPTY / —"
+    },
+    {
+      "name": "Sync-off capture starts immediately",
+      "ok": true,
+      "detail": "REC"
+    },
+    {
+      "name": "One-bar capture remains active until boundary",
+      "ok": true,
+      "detail": "99%"
+    },
+    {
+      "name": "One-bar capture completes",
+      "ok": true,
+      "detail": "2.00 s"
+    }
+  ],
+  "pass": 20,
+  "fail": 0,
+  "limitations": [
+    "Not target firmware execution",
+    "Not physical Bluebox hardware",
+    "No STM32 timing, DMA/cache, or SDRAM measurements",
+    "Web Audio output not exercised"
+  ]
+}
