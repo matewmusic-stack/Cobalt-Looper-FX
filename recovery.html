@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0e141b">
+<title>Bluebox Stock Recovery Card Writer</title>
+<style>
+:root{color-scheme:dark;--bg:#0e141b;--panel:#16202b;--panel2:#1c2835;--line:#2b3a4a;--ink:#e9eef4;--mute:#9fb0c3;--brand:#3986e8;--ok:#4fd18b;--warn:#f0b24a;--err:#ff8a8a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif;padding:28px 18px 60px}
+main{max-width:850px;margin:auto}h1{font-size:28px;line-height:1.2;margin:0 0 8px}h2{font-size:18px;margin:0 0 10px}.lede,.muted{color:var(--mute)}section{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:16px 0}
+a{color:#9bd2ff}button{font:inherit;border:0;border-radius:9px;padding:10px 14px;background:var(--brand);color:white;cursor:pointer}button.secondary{background:transparent;border:1px solid var(--line)}button:disabled{opacity:.45;cursor:not-allowed}
+.drop{display:block;border:2px dashed var(--line);background:var(--panel2);padding:22px;border-radius:12px;text-align:center;cursor:pointer}.drop:hover{border-color:var(--brand)}input[type=file]{max-width:100%}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:0 0 auto}.status{margin-top:12px;padding:12px;border-radius:9px;background:var(--panel2);white-space:pre-wrap;overflow-wrap:anywhere}.ok{border-left:3px solid var(--ok)}.warn{border-left:3px solid var(--warn)}.err{border-left:3px solid var(--err)}
+ol{padding-left:22px}li{margin:7px 0}code{background:#0b1117;padding:2px 5px;border-radius:5px}.small{font-size:13px;color:var(--mute)}.danger{color:#ffd08a}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <p class="muted">COBALT PROJECT · RECOVERY UTILITY</p>
+  <h1>Bluebox Stock Recovery</h1>
+  <p class="lede">Prepare a microSD card with the official Bluebox desktop stock firmware installer file. This utility does not flash the hardware over USB; the Bluebox's built-in installer performs the firmware restore at power-up.</p>
+</header>
+
+<section>
+  <h2>1. Get the official stock firmware</h2>
+  <p>Download the <strong>Bluebox desktop firmware 1.5.2</strong> package from 1010music. Unzip it and locate the file named <code>BLUEBOX.BIN</code>.</p>
+  <p><a href="https://1010music.com/wp-content/uploads/2026/08/bluebox-1.5.2.zip" target="_blank" rel="noopener">Download official Bluebox desktop 1.5.2 ZIP ↗</a></p>
+  <p class="small">Use the desktop Bluebox package, not the Bluebox Eurorack firmware. This page does not host or modify the firmware binary.</p>
+</section>
+
+<section>
+  <h2>2. Select the stock firmware file</h2>
+  <label class="drop" for="firmware">
+    <strong>Choose BLUEBOX.BIN</strong>
+    <span class="muted">Select the extracted file from the official ZIP package</span>
+    <input id="firmware" type="file" accept=".bin,application/octet-stream">
+  </label>
+  <div id="fileInfo" class="status" aria-live="polite">No firmware file selected.</div>
+</section>
+
+<section>
+  <h2>3. Prepare the microSD card</h2>
+  <ol>
+    <li>Back up the entire microSD card to your computer before proceeding.</li>
+    <li>Insert the card into your computer. Do not format it; this utility only writes <code>BLUEBOX.BIN</code> to the selected folder.</li>
+    <li>Choose the card's root folder below. Check the selected folder carefully before writing.</li>
+  </ol>
+  <div class="row">
+    <button id="choose" disabled>Choose microSD root folder</button>
+    <button id="download" class="secondary" disabled>Download BLUEBOX.BIN for manual copy</button>
+  </div>
+  <div id="targetInfo" class="status" aria-live="polite">No destination selected.</div>
+  <div id="backupArea" hidden>
+    <p class="danger">An existing BLUEBOX.BIN is present. Download a backup before replacing it.</p>
+    <button id="backup" class="secondary">Download existing BLUEBOX.BIN backup</button>
+  </div>
+  <div class="row" style="margin-top:14px">
+    <button id="write" disabled>Write stock firmware to card</button>
+  </div>
+  <div id="writeInfo" class="status" aria-live="polite">Waiting for firmware and destination.</div>
+</section>
+
+<section>
+  <h2>4. Install it in the Bluebox</h2>
+  <ol>
+    <li>Safely eject the microSD card from your computer.</li>
+    <li>Put the card back in the Bluebox and unplug the Bluebox power.</li>
+    <li>Hold the <strong>A button</strong> while plugging the Bluebox back in.</li>
+    <li>Release A when <strong>Bluebox Installer</strong> appears. Let the installer finish and restart the unit.</li>
+    <li>After restart, open Tools and check the firmware version.</li>
+  </ol>
+  <p class="small">These are the manufacturer's documented microSD recovery/update steps. Do not interrupt power while the installer is running.</p>
+  <p><a href="https://1010music.com/downloads" target="_blank" rel="noopener">1010music official downloads and support ↗</a> · <a href="https://1010music.com/support" target="_blank" rel="noopener">Support ↗</a></p>
+</section>
+
+<section>
+  <h2>Safety and limitations</h2>
+  <ul>
+    <li>This utility only copies a file to the microSD card. It does not communicate with the Bluebox over USB.</li>
+    <li>It does not format the card, alter the bootloader, or change any other files.</li>
+    <li>Only use the official <strong>Bluebox desktop</strong> stock image. Do not use Eurorack firmware or a Cobalt-patched image.</li>
+    <li>The file's SHA-256 is displayed for your records, but without a manufacturer-published reference hash this utility cannot independently authenticate the selected binary.</li>
+    <li>Direct folder writing requires a Chromium-based browser with File System Access support on HTTPS. Otherwise use the manual download button and copy the file yourself.</li>
+  </ul>
+</section>
+<footer class="small">Local-only utility. Firmware bytes are processed in this browser and are not uploaded.</footer>
+</main>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  let firmwareFile = null, firmwareBytes = null, firmwareHash = null;
+  let directory = null, existingFile = null, backupDownloaded = false;
+  const fmt = n => (n / 1048576).toFixed(2) + " MiB";
+  const hex = bytes => Array.from(new Uint8Array(bytes), b => b.toString(16).padStart(2,"0")).join("");
+  async function sha256(bytes) { return hex(await crypto.subtle.digest("SHA-256", bytes)); }
+  function setStatus(id, message, cls="") { const el=$(id); el.textContent=message; el.className="status "+cls; }
+  function updateButtons() {
+    $("choose").disabled = !firmwareFile;
+    $("download").disabled = !firmwareFile;
+    $("write").disabled = !(firmwareFile && directory && (!existingFile || backupDownloaded));
+  }
+  $("firmware").addEventListener("change", async e => {
+    firmwareFile=e.target.files && e.target.files[0] || null;
+    firmwareBytes=null; firmwareHash=null; directory=null; existingFile=null; backupDownloaded=false;
+    $("backupArea").hidden=true;
+    if (!firmwareFile) { setStatus("fileInfo","No firmware file selected."); updateButtons(); return; }
+    if (firmwareFile.name.toUpperCase() !== "BLUEBOX.BIN") {
+      firmwareFile=null; e.target.value="";
+      setStatus("fileInfo","Rejected: the selected file must be named BLUEBOX.BIN. Extract the official ZIP first."); updateButtons(); return;
+    }
+    if (firmwareFile.size < 1024) {
+      firmwareFile=null; e.target.value="";
+      setStatus("fileInfo","Rejected: file is unexpectedly small to be a firmware image."); updateButtons(); return;
+    }
+    setStatus("fileInfo","Reading firmware and calculating SHA-256…");
+    try {
+      firmwareBytes=await firmwareFile.arrayBuffer();
+      firmwareHash=await sha256(firmwareBytes);
+      setStatus("fileInfo", "Selected: "+firmwareFile.name+"\nSize: "+firmwareFile.size.toLocaleString()+" bytes ("+fmt(firmwareFile.size)+")\nSHA-256: "+firmwareHash+"\nSource authenticity is not independently verified.", "ok");
+    } catch(err) { firmwareFile=null; setStatus("fileInfo","Could not read firmware: "+err.message,"err"); }
+    updateButtons();
+  });
+  $("download").addEventListener("click", () => {
+    if (!firmwareBytes) return;
+    const url=URL.createObjectURL(new Blob([firmwareBytes],{type:"application/octet-stream"}));
+    const a=document.createElement("a"); a.href=url; a.download="BLUEBOX.BIN"; a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+    setStatus("writeInfo","Downloaded BLUEBOX.BIN. Copy it to the root of the microSD card, replacing the old file only after backing it up.","ok");
+  });
+  $("choose").addEventListener("click", async () => {
+    if (!window.showDirectoryPicker) {
+      setStatus("targetInfo","This browser cannot write directly to a selected folder. Use “Download BLUEBOX.BIN for manual copy” instead.","warn"); return;
+    }
+    try {
+      directory=await window.showDirectoryPicker({mode:"readwrite"});
+      existingFile=null; backupDownloaded=false;
+      try { existingFile=await directory.getFileHandle("BLUEBOX.BIN"); }
+      catch(e) { if (e.name!=="NotFoundError") throw e; }
+      if (existingFile) {
+        $("backupArea").hidden=false;
+        setStatus("targetInfo","Destination selected. An existing BLUEBOX.BIN was found. Download its backup before replacing it.","warn");
+      } else {
+        $("backupArea").hidden=true;
+        setStatus("targetInfo","Destination folder selected. No existing BLUEBOX.BIN found. Confirm this is the microSD card's ROOT folder.");
+      }
+    } catch(err) {
+      if (err.name!=="AbortError") setStatus("targetInfo","Could not select destination: "+err.message,"err");
+      directory=null; existingFile=null;
+    }
+    updateButtons();
+  });
+  $("backup").addEventListener("click", async () => {
+    if (!existingFile) return;
+    try {
+      const old=await existingFile.getFile();
+      const url=URL.createObjectURL(old);
+      const a=document.createElement("a"); a.href=url; a.download="BLUEBOX.BIN.backup"; a.click();
+      setTimeout(()=>URL.revokeObjectURL(url),1500);
+      backupDownloaded=true;
+      setStatus("targetInfo","Backup download requested. Keep that backup somewhere safe before continuing.","ok");
+    } catch(err) { setStatus("targetInfo","Backup failed: "+err.message,"err"); }
+    updateButtons();
+  });
+  $("write").addEventListener("click", async () => {
+    if (!directory || !firmwareBytes) return;
+    const confirmed=window.confirm("Write the selected stock BLUEBOX.BIN to the selected folder? This replaces only that filename. Confirm you selected the microSD card ROOT and backed up the card.");
+    if (!confirmed) return;
+    $("write").disabled=true;
+    try {
+      const handle=await directory.getFileHandle("BLUEBOX.BIN",{create:true});
+      const writable=await handle.createWritable({keepExistingData:false});
+      await writable.write(firmwareBytes);
+      await writable.close();
+      const check=await handle.getFile();
+      const checkBytes=await check.arrayBuffer();
+      const checkHash=await sha256(checkBytes);
+      if (check.size!==firmwareBytes.byteLength || checkHash!==firmwareHash) {
+        setStatus("writeInfo","READ-BACK VERIFICATION FAILED. Do not use this card yet. Re-copy the file or use manual copy on another card.","err");
+      } else {
+        setStatus("writeInfo","WRITE COMPLETE — READ-BACK VERIFIED\n"+check.size.toLocaleString()+" bytes\nSHA-256: "+checkHash+"\nSafely eject the card before putting it in the Bluebox.","ok");
+      }
+    } catch(err) {
+      setStatus("writeInfo","WRITE FAILED: "+err.message+"\nNo successful verification was recorded. Do not assume the card is ready.","err");
+    }
+    updateButtons();
+  });
+  updateButtons();
+})();
+</script>
+</body></html>
