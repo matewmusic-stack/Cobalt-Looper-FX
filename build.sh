@@ -58,4 +58,8 @@ done
 "$OBJCOPY" -O binary -j .cave build/cue4.elf build/cue4.bin
 "$NM" build/cue4.elf > build/cue4.symbols
 rm -f build/gr7_main.o build/gr7_fast.o build/delay7_main.o build/delay7_fast.o
-python3 tools/make_release.py "$@"
+if [ "${BUILD_ONLY:-0}" = "1" ]; then
+  echo "Compile-only build complete; release patcher generation skipped."
+else
+  python3 tools/make_release.py "$@"
+fi
