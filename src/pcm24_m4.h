@@ -67,7 +67,11 @@ __attribute__((naked)) void record_pcm24_stereo_bridge(void) {
     "mov r4,r0\nmov r5,r1\nmov r6,r2\n"
     "ldr r1,[sp,#0x34]\n"
     "ldr.w r0,[r8]\n"
-    /* Materialize the Thumb function pointer explicitly. A direct absolute BL\n     * leaves an unsupported ABS relocation with current arm-none-eabi-ld. */\n    "movw r12,#0xc313\n"\n    "movt r12,#0x0810\n"\n    "blx r12\n"
+    /* Materialize the Thumb function pointer explicitly. A direct absolute BL
+     * leaves an unsupported ABS relocation with current arm-none-eabi-ld. */
+    "movw r12,#0xc313\n"
+    "movt r12,#0x0810\n"
+    "blx r12\n"
     "ldr r1,[r0]\n"
     "ldr r0,[sp,#0x38]\n"
     "add r1,r0\n"
