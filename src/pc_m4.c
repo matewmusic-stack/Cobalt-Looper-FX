@@ -203,8 +203,12 @@ __attribute__((naked)) void pc_midi_isr(void) {
     "movw r2,#0x0fe4\n"
     "movt r2,#0x3880\n"
     "str r1,[r2]\n"
-    "b.w 0x08103386\n"
-    "1: b.w 0x081033ba\n");
+    "movw r12,#0x3387\n"
+    "movt r12,#0x0810\n"
+    "bx r12\n"
+    "1: movw r12,#0x33bb\n"
+    "movt r12,#0x0810\n"
+    "bx r12\n");
 }
 
 /* MIDI poll at 0x08103378 (cmp r0,#0xb0; beq 0x08103386): Bank Select MSB
@@ -214,7 +218,11 @@ __attribute__((naked)) void pc_midi_isr(void) {
 __attribute__((naked)) void pc_midi_cc(void) {
     __asm volatile(
     "cmp r0,#0xb0\n"
-    "bne.w 0x0810337c\n"
+    "beq 2f\n"
+    "movw r12,#0x337d\n"
+    "movt r12,#0x0810\n"
+    "bx r12\n"
+    "2:\n"
     "ldrb r1,[r4,#1]\n"
     "movw r2,#0x0fb8\n"
     "cbz r1,2f\n"
@@ -229,7 +237,9 @@ __attribute__((naked)) void pc_midi_cc(void) {
     "orr r1,r1,r3,lsl #8\n"
     "orr r1,r1,#0x1000\n"
     "str r1,[r2]\n"
-    "1: b.w 0x08103386\n");
+    "1: movw r12,#0x3387\n"
+    "movt r12,#0x0810\n"
+    "bx r12\n");
 }
 
 /* MIDI poll realtime path (clock, Start/Continue/Stop) at 0x081033e0: replay
@@ -244,7 +254,9 @@ __attribute__((naked)) void pc_midi_realtime(void) {
     "movw r2,#0x0fa0\n"
     "movt r2,#0x3880\n"
     "str r1,[r2]\n"
-    "b.w 0x081033e6\n");
+    "movw r12,#0x33e7\n"
+    "movt r12,#0x0810\n"
+    "bx r12\n");
 }
 
 /* Front-panel event ring (0x30000180): same producer pattern as the knob scan. */
@@ -1194,8 +1206,12 @@ __attribute__((naked)) void mo_convert(void) {
     "3: ldrb r2,[r4,#3]\n"
     "and r2,r2,#15\n"
     "orr r3,r3,r2,lsl #4\n"
-    "b.w 0x08103bb8\n"
-    "1: b.w 0x08103bee\n");
+    "movw r12,#0x3bb9\n"
+    "movt r12,#0x0810\n"
+    "bx r12\n"
+    "1: movw r12,#0x3bef\n"
+    "movt r12,#0x0810\n"
+    "bx r12\n");
 }
 /* Nothing is written while a batch is still in the ring, a TX slot or the USB
  * transfer: the SOF handler can replace a slot that is still waiting, so one
